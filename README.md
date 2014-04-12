@@ -1,0 +1,4 @@
+CollectiveIntelligence
+======================
+
+Programming Collective Intelligence
