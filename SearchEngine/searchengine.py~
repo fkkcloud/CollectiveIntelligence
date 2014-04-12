@@ -59,23 +59,15 @@ class crawler:
                 links = soup('a')
                 for link in links:
                     if ('href' in dict(link.attrs)):
-
                         url = urljoin(page,link['href'])
-
-                        if url.find("'") != -1: # "'' is for the un-defined url?
+                        if url.find("'") != -1:
                             continue
-
-                    
                         url = url.split('#')[0] # remove location portion
-
                         if url[0:4] == 'http' and not self.isindexed(url):
                             newpages.add(url)
-
-                    
                         linkText = self.gettextonly(link)
-                        self.addlinkref(page, url, linkText)
-                    
-                    
+                        self.addlinkred(page, url, linkText)
+                            
                     self.dbcommit()
 
                 pages = newpages
