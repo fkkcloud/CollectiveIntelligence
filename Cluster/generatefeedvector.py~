@@ -5,18 +5,23 @@ import pprint
 # Returns title and dictionary of word counts for an RSS feed
 
 def getwordcounts(url):
-    print "getwordcounts func"
     # Parse the feed
     d = feedparser.parse(url)
 
     wc = {}
+    for i in d:
+        print i
+
+    print "\n\n"
+
+    for i in d.feed:
+        print i
 
     try:
         pprint.pprint( d['feed']['title'] )
     except KeyError:
         print url , " is not RSS."
 
-    print 'a'
 #    pprint.pprint(d.feed.style)
 #    pprint.pprint(d.feed.links)
 #    pprint.pprint(d.feed.script)
@@ -40,7 +45,6 @@ def getwordcounts(url):
     return d.feed['title'], wc
 
 def getwords(html):
-    print "getWords func"
     # Remove all the HTML tags
     rcmp = re.compile(r'<[^>]+>')
     txt = rcmp.sub('',html)
@@ -57,18 +61,17 @@ def main():
     apcount = {}
     wordcounts = {}
     feedlist = [line for line in file('feedlist.txt')]
-        
-    for feedurl in file('feedlist.txt'):
-        try:
+    try:
+        for feedurl in file('feedlist.txt'):
             title , wc = getwordcounts(feedurl)
             wordcounts[title] = wc
             for word, count in wc.items():
                 apcount.setdefault(word, 0)
                 if count > 1:
                     apcount[word] += 1
-        except:
-            pass
-
+    except:
+        print 'Failed to parse feed %s' % feedurl
+    
     wordlist = []
     for w, bc in apcount.items():
         frac = float(bc) / len(feedlist)
