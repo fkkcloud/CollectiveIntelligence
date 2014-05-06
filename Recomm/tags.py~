@@ -1,0 +1,6 @@
+from pydelicious import *
+
+def initTagData(n=15):
+    pols = [get_popular(tag)[0:n] for tag in ['programming', 'software', 'arduino', 'artificial intelligence', 'apple', 'google', 'game']]
+    
+    

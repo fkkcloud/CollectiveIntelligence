@@ -1,0 +1,43 @@
+from pydelicious import get_popular, get_userposts, get_urlposts
+import time
+
+# Returns dict of empty dict for users who has the tag's website posted
+def initUserDict(tag, count=5):
+    user_dict={}
+    for post in get_popular(tag=tag)[0:count]:
+        for post2 in get_urlposts(post['url']):
+            user_dict[post2['user']] = {}
+    return user_dict
+
+# Modify user_dict to have each user dict to have url key 1 or 0
+def fillItems(user_dict):
+    all_items={}
+    for user in user_dict:
+        for i in range(3):
+            try:
+                posts=get_userposts(user)
+                break
+            except:
+                print "Failed user "+user+", retying"
+                time.sleep(4)
+        for post in posts:
+            url = post['url']
+            print url
+            user_dict[user][url]=1.0
+            all_items[url]=1
+    
+    print user_dict
+
+# VERY IMPORTANT 
+# Recommendations don't need all items to be compared since it just need
+# item's name
+# But! to find similarity based on it is there or not , 1 or 0,
+# it has to have every item_name to be compared!
+# Otherwise, it is going to get similarity based on the items that they
+# have mutually. <-- VERY IMPORTANT
+    for ratings in user_dict.values():
+        for item in all_items:
+            if item not in ratings:
+                ratings[item]=0.0
+
+
